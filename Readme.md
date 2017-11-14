@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Сергей Кравченко](https://up.htmlacademy.ru/javascript/11/user/13921).
-* Наставник: `Неизвестно`.
+* Наставник: [Денис Верхотуров](https://up.htmlacademy.ru/javascript/11/user/56756).
 
 ---
 
