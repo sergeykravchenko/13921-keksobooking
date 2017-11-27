@@ -1,10 +1,34 @@
 'use strict';
 
 var NOTICES_NUM = 8;
-var NOTICE_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-var NOTICE_TYPES = ['flat', 'house', 'bungalo'];
-// var NOTICE_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var NOTICE_CHECK_IN_OUT = ['12:00', '13:00', '14:00'];
+var NOTICE_TITLES = [
+  'Большая уютная квартира',
+  'Маленькая неуютная квартира',
+  'Огромный прекрасный дворец',
+  'Маленький ужасный дворец',
+  'Красивый гостевой домик',
+  'Некрасивый негостеприимный домик',
+  'Уютное бунгало далеко от моря',
+  'Неуютное бунгало по колено в воде'
+];
+var NOTICE_TYPES = [
+  'flat',
+  'house',
+  'bungalo'
+];
+var NOTICE_FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
+var NOTICE_CHECK_IN_OUT = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
 var LABEL_WIDTH = 40;
 var LABEL_HEIGHT = 40;
 var map = document.querySelector('.map');
@@ -12,7 +36,7 @@ var mapPinTemplate = document.querySelector('template').content.querySelector('.
 var mapPinList = map.querySelector('.map__pins');
 var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
 var notices = [];
-var avatars = [];
+var avatarId = [];
 
 var showElement = function (element, className) {
   if (element.classList.contains(className)) {
@@ -20,52 +44,65 @@ var showElement = function (element, className) {
   }
 };
 
-var getRandomInRange = function (min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
+var getRandom = function (min, max) {
+  return Math.random() * (max - min) + min;
+};
+
+var getRandomInteger = function (min, max) {
+  return Math.floor(getRandom(min, max));
 };
 
 var getRandomFrom = function (array) {
-  return array[Math.floor(getRandomInRange(0.1, 0.9) * array.length)];
+  return array[getRandomInteger(0.1, 0.9) * array.length];
 };
 
 var getRandomFromOnce = function (array) {
-  return array.splice(Math.floor(getRandomInRange(0.1, 0.9) * array.length), 1);
+  var arrayCopy = array.slice();
+  var rest = [];
+  return function () {
+    rest = rest.length > 0 ? rest : rest.concat(arrayCopy);
+    return rest.splice(getRandomInteger(0, rest.length), 1);
+  };
 };
 
-// var getFeaturesLength = function () {
-//   var features = [];
-//   for (var i = 0; i < NOTICE_FEATURES.length; i++) {
+var getFeatures = function () {
+  var features = NOTICE_FEATURES.slice();
+  var newFeatures = [];
+  var newFeaturesLength = getRandomFrom(features);
+
+  for (var i = 0; i < newFeaturesLength; i++) {
+  }
+};
+
+var locationX = getRandomInteger(300, 900);
+var locationY = getRandomInteger(100, 500);
+
+// var createAvatarsArray = function () {
+//   for (var i = 0; i < NOTICES_NUM; i++) {
+//     avatars[i] = i + 1;
+//   }
 //
+//   return avatars;
 // };
 
-var locationX = getRandomInRange(300, 900);
-var locationY = getRandomInRange(100, 500);
-
-var createAvatarsArray = function () {
-  for (var i = 0; i < NOTICES_NUM; i++) {
-    avatars[i] = i + 1;
-  }
-
-  return avatars;
-};
-
 for (var i = 0; i < NOTICES_NUM; i++) {
+  avatarId[i] = i + 1;
 
   notices[i] = {
     'author': {
-      'avatar': 'img/avatars/user0' + getRandomFromOnce(createAvatarsArray()) + '.png'
+      'avatar': 'img/avatars/user0' + avatarId[i] + '.png'
     },
 
     'offer': {
       'title': getRandomFromOnce(NOTICE_TITLES),
       'address': locationX + ', ' + locationY,
-      'price': getRandomInRange(1000, 1000000),
+      'price': getRandomInteger(1000, 1000000),
       'type': getRandomFrom(NOTICE_TYPES),
-      'rooms': getRandomInRange(1, 5),
-      'guests': getRandomInRange(1, 10), // от балды взял числа для гостей
+      'rooms': getRandomInteger(1, 5),
+      'guests': getRandomInteger(1, 10), // от балды взял числа для гостей
       'checkin': getRandomFrom(NOTICE_CHECK_IN_OUT),
       'checkout': getRandomFrom(NOTICE_CHECK_IN_OUT),
-      // 'features': getFeaturesLength(),
+      'features': getFeatures(),
       'description': '',
       'photos': []
     },
@@ -76,7 +113,6 @@ for (var i = 0; i < NOTICES_NUM; i++) {
     }
   };
 }
-// console.log(notices[i]);
 
 showElement(map, 'map--faded');
 
