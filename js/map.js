@@ -34,14 +34,12 @@ var LABEL_HEIGHT = 40;
 var map = document.querySelector('.map');
 var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 var mapPinList = map.querySelector('.map__pins');
+var mapContainer = map.querySelector('.map__filters-container');
 var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
 var notices = [];
-var avatarId = [];
 
 var showElement = function (element, className) {
-  if (element.classList.contains(className)) {
-    element.classList.remove(className);
-  }
+  element.classList.remove(className);
 };
 
 var getRandom = function (min, max) {
@@ -53,7 +51,7 @@ var getRandomInteger = function (min, max) {
 };
 
 var getRandomFrom = function (array) {
-  return array[getRandomInteger(0.1, 0.9) * array.length];
+  return array[getRandomInteger(0, array.length)];
 };
 
 var getRandomFromOnce = function (array) {
@@ -66,35 +64,27 @@ var getRandomFromOnce = function (array) {
 };
 
 var getFeatures = function () {
-  var features = NOTICE_FEATURES.slice();
-  var newFeatures = [];
-  var newFeaturesLength = getRandomFrom(features);
-
-  for (var i = 0; i < newFeaturesLength; i++) {
+  var features = [];
+  var length = getRandomInteger(1, NOTICE_FEATURES.length);
+  var getRandomFeature = getRandomFromOnce(NOTICE_FEATURES);
+  for (var i = 0; i < length; i++) {
+    features.push(getRandomFeature());
   }
+  return features;
 };
 
 var locationX = getRandomInteger(300, 900);
 var locationY = getRandomInteger(100, 500);
-
-// var createAvatarsArray = function () {
-//   for (var i = 0; i < NOTICES_NUM; i++) {
-//     avatars[i] = i + 1;
-//   }
-//
-//   return avatars;
-// };
+var getRandomTitle = getRandomFromOnce(NOTICE_TITLES);
 
 for (var i = 0; i < NOTICES_NUM; i++) {
-  avatarId[i] = i + 1;
-
   notices[i] = {
     'author': {
-      'avatar': 'img/avatars/user0' + avatarId[i] + '.png'
+      'avatar': 'img/avatars/user0' + (i + 1) + '.png'
     },
 
     'offer': {
-      'title': getRandomFromOnce(NOTICE_TITLES),
+      'title': getRandomTitle(),
       'address': locationX + ', ' + locationY,
       'price': getRandomInteger(1000, 1000000),
       'type': getRandomFrom(NOTICE_TYPES),
@@ -114,6 +104,16 @@ for (var i = 0; i < NOTICES_NUM; i++) {
   };
 }
 
+var getFeaturesList = function (features) {
+  var list = '';
+
+  for (var j = 0; j < features.length; j++) {
+    list += '<li class="feature feature--' + features[j] + '"></li>';
+  }
+
+  return list;
+};
+
 showElement(map, 'map--faded');
 
 var renderPins = function (notice) {
@@ -130,6 +130,7 @@ var renderCards = function (card) {
   var cardElement = mapCardTemplate.cloneNode(true);
   var offerType = '';
   var rubSign = '&#x20bd';
+  var featuresItems = getFeaturesList(card.offer.features);
 
   if (card.offer.type === 'flat') {
     offerType = 'Квартира';
@@ -141,11 +142,11 @@ var renderCards = function (card) {
 
   cardElement.querySelector('h3').textContent = card.offer.title;
   cardElement.querySelector('p small').textContent = card.offer.address;
-  cardElement.querySelector('.popup__price').innerHtml = card.offer.price + rubSign + '/ночь';
+  cardElement.querySelector('.popup__price').textContent = card.offer.price + rubSign + '/ночь';
   cardElement.querySelector('h4').textContent = offerType;
   cardElement.querySelector('h4 + p').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('h4 + p + p').textContent = 'Заезд после' + card.offer.checkin + ' выезд до ' + card.offer.checkout;
-  cardElement.querySelector('.popup__features').textContent = '';
+  cardElement.querySelector('.popup__features').insertAdjacentHTML('afterbegin', featuresItems);
   cardElement.querySelector('.popup__features + p').textContent = card.offer.description;
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
 
@@ -153,8 +154,9 @@ var renderCards = function (card) {
 };
 
 var fragment = document.createDocumentFragment();
-for (var j = 0; j < NOTICES_NUM; j++) {
-  fragment.appendChild(renderPins(notices[j]));
-  mapPinList.appendChild(fragment);
-  map.appendChild(renderCards(notices[j]));
+for (var k = 0; k < NOTICES_NUM; k++) {
+  fragment.appendChild(renderPins(notices[k]));
 }
+
+mapPinList.appendChild(fragment);
+map.insertBefore(renderCards(getRandomFrom(notices)), mapContainer);
