@@ -73,11 +73,12 @@ var getFeatures = function () {
   return features;
 };
 
-var locationX = getRandomInteger(300, 900);
-var locationY = getRandomInteger(100, 500);
 var getRandomTitle = getRandomFromOnce(NOTICE_TITLES);
 
 for (var i = 0; i < NOTICES_NUM; i++) {
+  var locationX = getRandomInteger(300, 900);
+  var locationY = getRandomInteger(100, 500);
+
   notices[i] = {
     'author': {
       'avatar': 'img/avatars/user0' + (i + 1) + '.png'
@@ -126,11 +127,20 @@ var renderPins = function (notice) {
   return pinElement;
 };
 
+var clearParent = function (el) {
+  while (el.hasChildNodes()) {
+    el.removeChild(el.lastChild);
+  }
+};
+
 var renderCards = function (card) {
   var cardElement = mapCardTemplate.cloneNode(true);
   var offerType = '';
-  var rubSign = '&#x20bd';
+  var rubSign = ' \u20bd';
+  var featuresList = cardElement.querySelector('.popup__features');
   var featuresItems = getFeaturesList(card.offer.features);
+
+  clearParent(featuresList);
 
   if (card.offer.type === 'flat') {
     offerType = 'Квартира';
@@ -146,7 +156,7 @@ var renderCards = function (card) {
   cardElement.querySelector('h4').textContent = offerType;
   cardElement.querySelector('h4 + p').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('h4 + p + p').textContent = 'Заезд после' + card.offer.checkin + ' выезд до ' + card.offer.checkout;
-  cardElement.querySelector('.popup__features').insertAdjacentHTML('afterbegin', featuresItems);
+  featuresList.insertAdjacentHTML('afterbegin', featuresItems);
   cardElement.querySelector('.popup__features + p').textContent = card.offer.description;
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
 
