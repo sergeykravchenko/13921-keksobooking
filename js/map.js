@@ -226,19 +226,28 @@ mapPinMain.addEventListener('mouseup', function () {
 mapPinList.addEventListener('click', function (evt) {
   var target = evt.target;
   target = target.parentNode;
-  if (target !== mapPinList) {
-    if (target.tagName === 'BUTTON' && !target.classList.contains('map__pin--main')) {
-      target.classList.add('map__pin--active');
-      openPopup();
+  var prevActive = mapPinList.querySelector('.map__pin--active');
+
+  while (target !== mapPinList) {
+    if (prevActive) {
+      prevActive.classList.remove('map__pin--active');
     }
+
+    if (target.tagName.toLowerCase() === 'button' && !target.classList.contains('map__pin--main')) {
+      target.classList.add('map__pin--active');
+    }
+
+    openPopup();
+
+    return;
   }
 });
 
 mapPinList.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     var target = evt.target;
-    if (target !== mapPinList) {
-      if (target.tagName === 'BUTTON' && !target.classList.contains('map__pin--main')) {
+    while (target !== mapPinList) {
+      if (target.tagName.toLowerCase() === 'button' && !target.classList.contains('map__pin--main')) {
         target.classList.add('map__pin--active');
         openPopup();
       }
