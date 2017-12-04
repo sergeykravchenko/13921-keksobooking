@@ -64,10 +64,6 @@ var getRandomFromOnce = function (array) {
   };
 };
 
-var isFocused = function (element) {
-  return element === document.activeElement;
-};
-
 var getFeatures = function () {
   var features = [];
   var length = getRandomInteger(1, NOTICE_FEATURES.length);
@@ -179,6 +175,34 @@ map.insertBefore(renderCards(getRandomFrom(notices)), mapContainer);
 
 var mapCard = map.querySelector('.popup');
 var mapCardClose = mapCard.querySelector('.popup__close');
+var timeIn = document.querySelector('#timein');
+var timeOut = document.querySelector('#timeout');
+
+var syncDataSelect = function (optionFirst, optionSecond) {
+  optionFirst.addEventListener('change', function () {
+    optionSecond.selectedIndex = optionFirst.selectedIndex;
+  });
+};
+
+syncDataSelect(timeIn, timeOut);
+
+var type = document.querySelector('#type');
+var price = document.querySelector('#price');
+
+var syncTypePrice = function () {
+
+  if (type.value === 'bungalo') {
+    price.setAttribute('minlength', '0');
+  } else if (type.value === 'flat') {
+    price.setAttribute('minlength', '1000');
+  } else if (type.value === 'house') {
+    price.setAttribute('minlength', '5000');
+  } else if (type.value === 'palace') {
+    price.setAttribute('minlength', '10000');
+  }
+};
+
+type.addEventListener('change', syncTypePrice);
 
 var removeClass = function (element, className) {
   element.classList.remove(className);
@@ -223,15 +247,20 @@ mapPinMain.addEventListener('mouseup', function () {
   mapPinList.appendChild(getPins());
 });
 
+var isActive = function (el) {
+  if (el) {
+    el.classList.remove('map__pin--active');
+  }
+};
+
 mapPinList.addEventListener('click', function (evt) {
   var target = evt.target;
   target = target.parentNode;
-  var prevActive = mapPinList.querySelector('.map__pin--active');
+  var activePin = mapPinList.querySelector('.map__pin--active');
 
   while (target !== mapPinList) {
-    if (prevActive) {
-      prevActive.classList.remove('map__pin--active');
-    }
+    isActive(activePin);
+
 
     if (target.tagName.toLowerCase() === 'button' && !target.classList.contains('map__pin--main')) {
       target.classList.add('map__pin--active');
@@ -246,10 +275,16 @@ mapPinList.addEventListener('click', function (evt) {
 mapPinList.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     var target = evt.target;
+    var activePin = mapPinList.querySelector('.map__pin--active');
     while (target !== mapPinList) {
+      isActive(activePin);
+
       if (target.tagName.toLowerCase() === 'button' && !target.classList.contains('map__pin--main')) {
         target.classList.add('map__pin--active');
+
         openPopup();
+
+        return;
       }
     }
   }
