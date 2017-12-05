@@ -107,10 +107,13 @@ for (var i = 0; i < NOTICES_NUM; i++) {
 }
 
 var getFeaturesList = function (features) {
-  var list = '';
+  var list = document.createDocumentFragment();
 
   for (var j = 0; j < features.length; j++) {
-    list += '<li class="feature feature--' + features[j] + '"></li>';
+    var item = document.createElement('li');
+    item.classList.add('feature', 'feature--' + features[j]);
+
+    list.appendChild(item);
   }
 
   return list;
@@ -155,7 +158,7 @@ var renderCards = function (card) {
   cardElement.querySelector('h4').textContent = offerType;
   cardElement.querySelector('h4 + p').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('h4 + p + p').textContent = 'Заезд после' + card.offer.checkin + ' выезд до ' + card.offer.checkout;
-  featuresList.insertAdjacentHTML('afterbegin', featuresItems);
+  featuresList.appendChild(featuresItems);
   cardElement.querySelector('.popup__features + p').textContent = card.offer.description;
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
 
@@ -190,15 +193,20 @@ var type = document.querySelector('#type');
 var price = document.querySelector('#price');
 
 var syncTypePrice = function () {
-
-  if (type.value === 'bungalo') {
-    price.setAttribute('minlength', '0');
-  } else if (type.value === 'flat') {
-    price.setAttribute('minlength', '1000');
-  } else if (type.value === 'house') {
-    price.setAttribute('minlength', '5000');
-  } else if (type.value === 'palace') {
-    price.setAttribute('minlength', '10000');
+  var x = type.value;
+  switch (x) {
+    case 'bungalo':
+      price.setAttribute('minlength', '0');
+      break;
+    case 'flat':
+      price.setAttribute('minlength', '1000');
+      break;
+    case 'house':
+      price.setAttribute('minlength', '5000');
+      break;
+    case 'palace':
+      price.setAttribute('minlength', '10000');
+      break;
   }
 };
 
@@ -220,6 +228,7 @@ var onPopupEscPress = function (evt) {
 
 var closePopup = function () {
   mapCard.classList.add('hidden');
+  deactivatePin();
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
@@ -247,26 +256,28 @@ mapPinMain.addEventListener('mouseup', function () {
   mapPinList.appendChild(getPins());
 });
 
-var isActive = function (el) {
-  if (el) {
-    el.classList.remove('map__pin--active');
+var deactivatePin = function () {
+  var activePin = mapPinList.querySelector('.map__pin--active');
+
+  if (activePin) {
+    activePin.classList.remove('map__pin--active');
   }
+};
+
+var activatePin = function (pin) {
+  deactivatePin();
+  pin.classList.add('map__pin--active');
 };
 
 mapPinList.addEventListener('click', function (evt) {
   var target = evt.target;
   target = target.parentNode;
-  var activePin = mapPinList.querySelector('.map__pin--active');
 
   while (target !== mapPinList) {
-    isActive(activePin);
-
-
-    if (target.tagName.toLowerCase() === 'button' && !target.classList.contains('map__pin--main')) {
-      target.classList.add('map__pin--active');
+    if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
+      activatePin(target);
+      openPopup();
     }
-
-    openPopup();
 
     return;
   }
@@ -275,13 +286,10 @@ mapPinList.addEventListener('click', function (evt) {
 mapPinList.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     var target = evt.target;
-    var activePin = mapPinList.querySelector('.map__pin--active');
+
     while (target !== mapPinList) {
-      isActive(activePin);
-
-      if (target.tagName.toLowerCase() === 'button' && !target.classList.contains('map__pin--main')) {
-        target.classList.add('map__pin--active');
-
+      if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
+        activatePin(target);
         openPopup();
 
         return;
