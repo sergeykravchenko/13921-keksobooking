@@ -1,6 +1,5 @@
 'use strict';
-
-window.form = (function () {
+(function () {
   var noticeForm = document.querySelector('.notice__form');
   var formSubmit = noticeForm.querySelector('.form__submit');
   var titleField = noticeForm.querySelector('#title');

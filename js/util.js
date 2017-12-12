@@ -1,19 +1,12 @@
 'use strict';
-
 (function () {
-  var KEY_CODE = {
-    ESC: 27,
-    ENTER: 13
-  };
-
   window.util = {
-    pressedEsc: function (evt, action) {
-      if (evt.keyCode === KEY_CODE.ESC) {
-        action();
-      }
+    KEY_CODE: {
+      ESC: 27,
+      ENTER: 13
     },
-    pressedEnter: function (evt, action) {
-      if (evt.keyCode === KEY_CODE.ENTER) {
+    onPressedKey: function (evt, keycode, action) {
+      if (evt.keyCode === keycode) {
         action();
       }
     },

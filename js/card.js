@@ -1,6 +1,6 @@
 'use strict';
 
-window.card = (function () {
+(function () {
   var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
 
 
@@ -14,7 +14,7 @@ window.card = (function () {
     return list;
   }
 
-  return {
+  window.card = {
     renderDialog: function (advert) {
       var dialog = mapCardTemplate.cloneNode(true);
       var featuresList = dialog.querySelector('.popup__features');

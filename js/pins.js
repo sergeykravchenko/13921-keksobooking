@@ -1,7 +1,6 @@
 'use strict';
 
-
-window.pins = (function () {
+(function () {
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var mapPinMain = document.querySelector('.map__pin--main');
   var map = document.querySelector('.map');
@@ -31,7 +30,7 @@ window.pins = (function () {
   }
 
   function onDialogEscPress(evt) {
-    window.util.pressedEsc(evt, closeDialog);
+    window.util.onPressedKey(evt, window.util.KEY_CODE.ESC, closeDialog);
   }
 
   function closeDialog() {
@@ -75,7 +74,7 @@ window.pins = (function () {
   });
 
   mapPinList.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === KEY_CODE.ENTER) {
+    if (evt.keyCode === window.util.KEY_CODE.ENTER) {
       var target = evt.target;
 
       while (target !== mapPinList) {

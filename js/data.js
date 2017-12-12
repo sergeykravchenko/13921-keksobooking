@@ -1,6 +1,6 @@
 'use strict';
 
-window.data = (function () {
+(function () {
   var ADVERT_NUM = 8;
   var ADVERT_TITLES = [
     'Большая уютная квартира',
@@ -37,7 +37,7 @@ window.data = (function () {
     return Array.from({length: length}, getRandomFeature);
   }
 
-  return {
+  window.data = {
     getRandomAdverts: function () {
       var getRandomTitle = window.util.getRandomSupplierOf(ADVERT_TITLES);
       return Array.from({length: ADVERT_NUM}, function (element, index) {
