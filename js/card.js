@@ -3,7 +3,6 @@
 (function () {
   var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
 
-
   function renderFeatures(features) {
     var list = document.createDocumentFragment();
     features.forEach(function (feature) {

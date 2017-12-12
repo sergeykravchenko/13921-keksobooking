@@ -5,11 +5,13 @@
       ESC: 27,
       ENTER: 13
     },
+
     onPressedKey: function (evt, keycode, action) {
       if (evt.keyCode === keycode) {
         action();
       }
     },
+
     getRandom: function (min, max) {
       return Math.random() * (max - min) + min;
     },

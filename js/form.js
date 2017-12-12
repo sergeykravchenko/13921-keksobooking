@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var noticeForm = document.querySelector('.notice__form');
+  var noticeFormBlocks = noticeForm.querySelectorAll('.form__element');
   var formSubmit = noticeForm.querySelector('.form__submit');
   var titleField = noticeForm.querySelector('#title');
   var typeField = noticeForm.querySelector('#type');
@@ -27,6 +28,10 @@
       default: 3
     }
   ];
+
+  [].forEach.call(noticeFormBlocks, function (field) {
+    field.setAttribute('disabled', '');
+  });
 
   function checkTitleField() {
     if (titleField.validity.tooShort) {

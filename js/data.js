@@ -12,11 +12,13 @@
     'Уютное бунгало далеко от моря',
     'Неуютное бунгало по колено в воде'
   ];
+
   var ADVERT_TYPES = [
     'flat',
     'house',
     'bungalo'
   ];
+
   var ADVERT_FEATURES = [
     'wifi',
     'dishwasher',
@@ -25,6 +27,7 @@
     'elevator',
     'conditioner'
   ];
+
   var ADVERT_CHECK_TIMES = [
     '12:00',
     '13:00',
