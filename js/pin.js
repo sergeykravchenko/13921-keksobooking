@@ -8,7 +8,6 @@
   var activeDialog;
   var LABEL_WIDTH = 40;
   var LABEL_HEIGHT = 40;
-
   var adverts = window.data.getRandomAdverts(window.data.ADVERT_NUM);
 
   function renderPin(advert) {
