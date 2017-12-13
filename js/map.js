@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var PIN_HEIGHT = 62;
-  var PIN_TAIL_HEIGHT = 22;
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var mapPinList = map.querySelector('.map__pins');
