@@ -1,13 +1,13 @@
 'use strict';
 
 (function () {
+  var LABEL_WIDTH = 40;
+  var LABEL_HEIGHT = 40;
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var map = document.querySelector('.map');
   var mapContainer = map.querySelector('.map__filters-container');
   var activePin;
   var activeDialog;
-  var LABEL_WIDTH = 40;
-  var LABEL_HEIGHT = 40;
   var adverts = window.data.getRandomAdverts(window.data.ADVERT_NUM);
 
   function renderPin(advert) {
