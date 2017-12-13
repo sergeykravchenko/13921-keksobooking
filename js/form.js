@@ -120,4 +120,8 @@
   priceField.addEventListener('change', checkPriceField);
   roomField.addEventListener('change', checkRoomsCapacity);
   formSubmit.addEventListener('click', checkOnClick);
+
+  window.form = {
+    addressField: noticeForm.querySelector('#address')
+  };
 })();
