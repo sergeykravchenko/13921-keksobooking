@@ -39,18 +39,6 @@
       coordX = window.util.bounded(mapPinMain.offsetLeft - shift.x, 0, map.clientWidth);
       coordY = window.util.bounded(mapPinMain.offsetTop - shift.y, dragAreaY.min, dragAreaY.max);
 
-      // if (coordY < dragAreaY.min) {
-      //   coordY = dragAreaY.min;
-      // } else if (coordY > dragAreaY.max) {
-      //   coordY = dragAreaY.max;
-      // }
-      //
-      // if (coordX < 0) {
-      //   coordX = 0;
-      // } else if (coordX > map.clientWidth) {
-      //   coordX = map.clientWidth;
-      // }
-
       mapPinMain.style.left = coordX + 'px';
       mapPinMain.style.top = coordY + 'px';
 
