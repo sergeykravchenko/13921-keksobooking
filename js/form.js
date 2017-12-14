@@ -56,36 +56,28 @@
     }
   }
 
-  function syncDataSelect(optionFirst, optionSecond) {
-    optionFirst.addEventListener('change', function () {
-      optionSecond.selectedIndex = optionFirst.selectedIndex;
-    });
-
-    optionSecond.addEventListener('change', function () {
-      optionFirst.selectedIndex = optionSecond.selectedIndex;
-    });
+  function syncValues(element, value) {
+    element.value = value;
   }
 
-  syncDataSelect(timeInField, timeOutField);
-
-  function syncTypePrice() {
-    switch (typeField.value) {
-      case 'bungalo':
-        priceField.setAttribute('min', '0');
-        break;
-      case 'flat':
-        priceField.setAttribute('min', '1000');
-        break;
-      case 'house':
-        priceField.setAttribute('min', '5000');
-        break;
-      case 'palace':
-        priceField.setAttribute('min', '10000');
-        break;
-    }
+  function syncValueWithMin(element, value) {
+    element.min = value;
   }
 
-  syncTypePrice();
+  function timeInChangeHandler(evt) {
+    window.synchronizeFields(evt.target, timeOutField, window.data.ADVERT_CHECK_TIMES,
+        window.data.ADVERT_CHECK_TIMES, syncValues);
+  }
+
+  function timeOutChangeHandler(evt) {
+    window.synchronizeFields(evt.target, timeInField, window.data.ADVERT_CHECK_TIMES,
+        window.data.ADVERT_CHECK_TIMES, syncValues);
+  }
+
+  function syncTypePrice(evt) {
+    window.synchronizeFields(evt.target, priceField, window.data.OFFER_TYPE,
+        window.data.PRICES_TYPE, syncValueWithMin);
+  }
 
   function checkRoomsCapacity() {
     var roomOptions = capacityOptions[roomField.selectedIndex];
@@ -117,6 +109,9 @@
 
   titleField.addEventListener('change', checkTitleField);
   typeField.addEventListener('change', syncTypePrice);
+  timeInField.addEventListener('change', timeInChangeHandler);
+  timeOutField.addEventListener('change', timeOutChangeHandler);
+  priceField.addEventListener('change', syncTypePrice);
   priceField.addEventListener('change', checkPriceField);
   roomField.addEventListener('change', checkRoomsCapacity);
   formSubmit.addEventListener('click', checkOnClick);

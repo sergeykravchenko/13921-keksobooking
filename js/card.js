@@ -3,21 +3,11 @@
 (function () {
   var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
 
-  function renderFeatures(features) {
-    var list = document.createDocumentFragment();
-    features.forEach(function (feature) {
-      var item = document.createElement('li');
-      item.classList.add('feature', 'feature--' + feature);
-      list.appendChild(item);
-    });
-    return list;
-  }
-
   window.card = {
-    renderDialog: function (advert) {
+    renderCard: function (advert) {
       var dialog = mapCardTemplate.cloneNode(true);
       var featuresList = dialog.querySelector('.popup__features');
-      var featuresItems = renderFeatures(advert.offer.features);
+      var featuresItems = window.data.renderFeatures(advert.offer.features);
       var offerType;
 
       window.util.clearParent(featuresList);

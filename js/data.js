@@ -19,6 +19,20 @@
     'bungalo'
   ];
 
+  var OFFER_TYPE = [
+    'Квартира',
+    'Дом',
+    'Бунгало',
+    'Дворец'
+  ];
+
+  var PRICES_TYPE = [
+    1000,
+    0,
+    5000,
+    10000
+  ];
+
   var ADVERT_FEATURES = [
     'wifi',
     'dishwasher',
@@ -41,6 +55,10 @@
   }
 
   window.data = {
+    ADVERT_CHECK_TIMES: ADVERT_CHECK_TIMES,
+    OFFER_TYPE: OFFER_TYPE,
+    PRICES_TYPE: PRICES_TYPE,
+
     getRandomAdverts: function () {
       var getRandomTitle = window.util.getRandomSupplierOf(ADVERT_TITLES);
       return Array.from({length: ADVERT_NUM}, function (element, index) {
@@ -69,6 +87,16 @@
           }
         };
       });
+    },
+
+    renderFeatures: function (features) {
+      var list = document.createDocumentFragment();
+      features.forEach(function (feature) {
+        var item = document.createElement('li');
+        item.classList.add('feature', 'feature--' + feature);
+        list.appendChild(item);
+      });
+      return list;
     }
   };
 })();

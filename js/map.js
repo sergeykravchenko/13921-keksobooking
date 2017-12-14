@@ -13,36 +13,6 @@
     max: 500
   };
 
-  mapPinList.addEventListener('click', function (evt) {
-    var target = evt.target;
-
-    while (target !== mapPinList) {
-      if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-        window.pin.activatePin(target);
-        window.pin.openDialog();
-
-        break;
-      }
-
-      target = target.parentNode;
-    }
-  });
-
-  mapPinList.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.KEY_CODE.ENTER) {
-      var target = evt.target;
-
-      while (target !== mapPinList) {
-        if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-          window.pin.activatePin(target);
-          window.pin.openDialog();
-
-          return;
-        }
-      }
-    }
-  });
-
   mapPinMain.addEventListener('mousedown', dragAndDrop);
 
   function dragAndDrop(evt) {
