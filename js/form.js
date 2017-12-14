@@ -64,20 +64,22 @@
     element.min = value;
   }
 
-  function timeInChangeHandler(evt) {
-    window.synchronizeFields(evt.target, timeOutField, window.data.ADVERT_CHECK_TIMES,
+  function timeInChangeHandler() {
+    window.synchronizeFields(timeInField.selectedIndex, timeOutField, window.data.ADVERT_CHECK_TIMES,
         window.data.ADVERT_CHECK_TIMES, syncValues);
   }
 
-  function timeOutChangeHandler(evt) {
-    window.synchronizeFields(evt.target, timeInField, window.data.ADVERT_CHECK_TIMES,
+  function timeOutChangeHandler() {
+    window.synchronizeFields(timeOutField.selectedIndex, timeInField, window.data.ADVERT_CHECK_TIMES,
         window.data.ADVERT_CHECK_TIMES, syncValues);
   }
 
-  function syncTypePrice(evt) {
-    window.synchronizeFields(evt.target, priceField, window.data.OFFER_TYPE,
+  function syncTypePrice() {
+    window.synchronizeFields(typeField.selectedIndex, priceField, window.data.OFFER_TYPE,
         window.data.PRICES_TYPE, syncValueWithMin);
   }
+
+  syncTypePrice();
 
   function checkRoomsCapacity() {
     var roomOptions = capacityOptions[roomField.selectedIndex];
