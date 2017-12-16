@@ -109,6 +109,15 @@
     checkValidity(priceField);
   }
 
+  function resetForm() {
+    noticeForm.reset();
+  }
+
+  function formSubmitHandler(evt) {
+    window.backend.save(new FormData(noticeForm), resetForm, window.backend.showError);
+    evt.preventDefault();
+  }
+
   titleField.addEventListener('change', checkTitleField);
   typeField.addEventListener('change', syncTypePrice);
   timeInField.addEventListener('change', timeInChangeHandler);
@@ -117,6 +126,8 @@
   priceField.addEventListener('change', checkPriceField);
   roomField.addEventListener('change', checkRoomsCapacity);
   formSubmit.addEventListener('click', checkOnClick);
+  noticeForm.addEventListener('submit', formSubmitHandler);
+
 
   window.form = {
     addressField: noticeForm.querySelector('#address')
