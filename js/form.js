@@ -56,33 +56,27 @@
     }
   }
 
-  function syncDataSelect(optionFirst, optionSecond) {
-    optionFirst.addEventListener('change', function () {
-      optionSecond.selectedIndex = optionFirst.selectedIndex;
-    });
-
-    optionSecond.addEventListener('change', function () {
-      optionFirst.selectedIndex = optionSecond.selectedIndex;
-    });
+  function syncValues(element, value) {
+    element.value = value;
   }
 
-  syncDataSelect(timeInField, timeOutField);
+  function syncValueWithMin(element, value) {
+    element.min = value;
+  }
+
+  function timeInChangeHandler() {
+    window.synchronizeFields(timeInField.selectedIndex, timeOutField, window.data.ADVERT_CHECK_TIMES,
+        window.data.ADVERT_CHECK_TIMES, syncValues);
+  }
+
+  function timeOutChangeHandler() {
+    window.synchronizeFields(timeOutField.selectedIndex, timeInField, window.data.ADVERT_CHECK_TIMES,
+        window.data.ADVERT_CHECK_TIMES, syncValues);
+  }
 
   function syncTypePrice() {
-    switch (typeField.value) {
-      case 'bungalo':
-        priceField.setAttribute('min', '0');
-        break;
-      case 'flat':
-        priceField.setAttribute('min', '1000');
-        break;
-      case 'house':
-        priceField.setAttribute('min', '5000');
-        break;
-      case 'palace':
-        priceField.setAttribute('min', '10000');
-        break;
-    }
+    window.synchronizeFields(typeField.selectedIndex, priceField, window.data.OFFER_TYPE,
+        window.data.PRICES_TYPE, syncValueWithMin);
   }
 
   syncTypePrice();
@@ -115,11 +109,25 @@
     checkValidity(priceField);
   }
 
+  function resetForm() {
+    noticeForm.reset();
+  }
+
+  function formSubmitHandler(evt) {
+    window.backend.save(new FormData(noticeForm), resetForm, window.backend.showError);
+    evt.preventDefault();
+  }
+
   titleField.addEventListener('change', checkTitleField);
   typeField.addEventListener('change', syncTypePrice);
+  timeInField.addEventListener('change', timeInChangeHandler);
+  timeOutField.addEventListener('change', timeOutChangeHandler);
+  priceField.addEventListener('change', syncTypePrice);
   priceField.addEventListener('change', checkPriceField);
   roomField.addEventListener('change', checkRoomsCapacity);
   formSubmit.addEventListener('click', checkOnClick);
+  noticeForm.addEventListener('submit', formSubmitHandler);
+
 
   window.form = {
     addressField: noticeForm.querySelector('#address')

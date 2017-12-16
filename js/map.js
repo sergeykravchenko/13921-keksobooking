@@ -13,36 +13,6 @@
     max: 500
   };
 
-  mapPinList.addEventListener('click', function (evt) {
-    var target = evt.target;
-
-    while (target !== mapPinList) {
-      if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-        window.pin.activatePin(target);
-        window.pin.openDialog();
-
-        break;
-      }
-
-      target = target.parentNode;
-    }
-  });
-
-  mapPinList.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.KEY_CODE.ENTER) {
-      var target = evt.target;
-
-      while (target !== mapPinList) {
-        if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-          window.pin.activatePin(target);
-          window.pin.openDialog();
-
-          return;
-        }
-      }
-    }
-  });
-
   mapPinMain.addEventListener('mousedown', dragAndDrop);
 
   function dragAndDrop(evt) {
@@ -66,20 +36,8 @@
         y: moveEvt.clientY
       };
 
-      coordX = mapPinMain.offsetLeft - shift.x;
-      coordY = mapPinMain.offsetTop - shift.y;
-
-      if (coordY < dragAreaY.min) {
-        coordY = dragAreaY.min;
-      } else if (coordY > dragAreaY.max) {
-        coordY = dragAreaY.max;
-      }
-
-      if (coordX < 0) {
-        coordX = 0;
-      } else if (coordX > map.clientWidth) {
-        coordX = map.clientWidth;
-      }
+      coordX = window.util.bounded(mapPinMain.offsetLeft - shift.x, 0, map.clientWidth);
+      coordY = window.util.bounded(mapPinMain.offsetTop - shift.y, dragAreaY.min, dragAreaY.max);
 
       mapPinMain.style.left = coordX + 'px';
       mapPinMain.style.top = coordY + 'px';
