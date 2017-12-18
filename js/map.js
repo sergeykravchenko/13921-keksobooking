@@ -54,7 +54,11 @@
         field.removeAttribute('disabled');
       });
 
-      mapPinList.appendChild(window.pin.renderPins());
+      window.backend.load(successHandler, window.backend.showError);
+
+      function successHandler(data) {
+        mapPinList.appendChild(window.pin.renderPins(data));
+      }
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
