@@ -29,6 +29,26 @@
     }
   ];
 
+  var OFFER_TYPE = [
+    'Квартира',
+    'Дом',
+    'Бунгало',
+    'Дворец'
+  ];
+
+  var PRICES_TYPE = [
+    1000,
+    0,
+    5000,
+    10000
+  ];
+
+  var ADVERT_CHECK_TIMES = [
+    '12:00',
+    '13:00',
+    '14:00'
+  ];
+
   [].forEach.call(noticeFormBlocks, function (field) {
     field.setAttribute('disabled', '');
   });
@@ -65,18 +85,18 @@
   }
 
   function timeInChangeHandler() {
-    window.synchronizeFields(timeInField.selectedIndex, timeOutField, window.data.ADVERT_CHECK_TIMES,
-        window.data.ADVERT_CHECK_TIMES, syncValues);
+    window.synchronizeFields(timeInField.selectedIndex, timeOutField, ADVERT_CHECK_TIMES,
+        ADVERT_CHECK_TIMES, syncValues);
   }
 
   function timeOutChangeHandler() {
-    window.synchronizeFields(timeOutField.selectedIndex, timeInField, window.data.ADVERT_CHECK_TIMES,
-        window.data.ADVERT_CHECK_TIMES, syncValues);
+    window.synchronizeFields(timeOutField.selectedIndex, timeInField, ADVERT_CHECK_TIMES,
+        ADVERT_CHECK_TIMES, syncValues);
   }
 
   function syncTypePrice() {
-    window.synchronizeFields(typeField.selectedIndex, priceField, window.data.OFFER_TYPE,
-        window.data.PRICES_TYPE, syncValueWithMin);
+    window.synchronizeFields(typeField.selectedIndex, priceField, OFFER_TYPE,
+        PRICES_TYPE, syncValueWithMin);
   }
 
   syncTypePrice();
