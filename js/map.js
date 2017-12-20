@@ -1,19 +1,45 @@
 'use strict';
 
 (function () {
+  var PINS_NUM = 5;
+  var DRAG_AREA_Y = {
+    min: 100,
+    max: 500
+  };
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var mapPinList = map.querySelector('.map__pins');
+  var filters = document.querySelector('.map__filters');
   var noticeForm = document.querySelector('.notice__form');
   var noticeFormBlocks = noticeForm.querySelectorAll('.form__element');
   var coordX;
   var coordY;
-  var dragAreaY = {
-    min: 100,
-    max: 500
-  };
 
   mapPinMain.addEventListener('mousedown', dragAndDrop);
+
+  function successHandler(data) {
+    window.data = data;
+    mapPinList.appendChild(window.pin.renderPins(data));
+  }
+
+  filters.addEventListener('change', function () {
+    window.debounce(function () {
+      clearPins();
+      updatePinsOnFilter();
+    });
+  });
+
+  function clearPins() {
+    var pins = mapPinList.querySelectorAll('.map__pin:not(.map__pin__main)');
+    [].forEach.call(pins, function (item) {
+      item.remove();
+    });
+  }
+
+  function updatePinsOnFilter() {
+    var filteredPins = window.filterPins(window.pin.renderPins(window.data)).slice(0, PINS_NUM);
+    mapPinList.appendChild(filteredPins);
+  }
 
   function dragAndDrop(evt) {
     evt.preventDefault();
@@ -37,7 +63,7 @@
       };
 
       coordX = window.util.bounded(mapPinMain.offsetLeft - shift.x, 0, map.clientWidth);
-      coordY = window.util.bounded(mapPinMain.offsetTop - shift.y, dragAreaY.min, dragAreaY.max);
+      coordY = window.util.bounded(mapPinMain.offsetTop - shift.y, DRAG_AREA_Y.min, DRAG_AREA_Y.max);
 
       mapPinMain.style.left = coordX + 'px';
       mapPinMain.style.top = coordY + 'px';
@@ -55,10 +81,6 @@
       });
 
       window.backend.load(successHandler, window.backend.showError);
-
-      function successHandler(data) {
-        mapPinList.appendChild(window.pin.renderPins(data));
-      }
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);

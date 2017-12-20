@@ -11,22 +11,10 @@
   var timeOutField = noticeForm.querySelector('#timeout');
   var capacityField = noticeForm.querySelector('#capacity');
   var capacityOptions = [
-    {
-      allowed: [2],
-      default: 2
-    },
-    {
-      allowed: [1, 2],
-      default: 1
-    },
-    {
-      allowed: [0, 1, 2],
-      default: 0
-    },
-    {
-      allowed: [3],
-      default: 3
-    }
+    [2],
+    [1, 2],
+    [0, 1, 2],
+    [3]
   ];
 
   var OFFER_TYPE = [
@@ -102,14 +90,12 @@
   syncTypePrice();
 
   function checkRoomsCapacity() {
-    var roomOptions = capacityOptions[roomField.selectedIndex];
-    [].forEach.call(capacityField.options, function (option) {
-      option.hidden = true;
+    var allowedOption = capacityOptions[roomField.selectedIndex];
+    var defaultOption = allowedOption[0];
+    capacityField[defaultOption].selected = true;
+    [].forEach.call(capacityField.options, function (option, index) {
+      option.hidden = allowedOption.includes(index);
     });
-    roomOptions.allowed.forEach(function (option) {
-      capacityField.options[option].hidden = false;
-    });
-    capacityField[roomOptions.default].selected = true;
   }
 
   checkRoomsCapacity();
