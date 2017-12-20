@@ -21,9 +21,9 @@
       window.showCard.activePin = pin;
     },
 
-    renderPins: function (adverts) {
+    renderPins: function (adverts, num) {
       var fragment = document.createDocumentFragment();
-      adverts.forEach(function (notice) {
+      adverts.slice(0, num).forEach(function (notice) {
         var pin = renderPin(notice);
         var pinClickHandler = window.showCard.openDialog(notice);
         pin.addEventListener('click', pinClickHandler);

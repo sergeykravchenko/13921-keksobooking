@@ -19,26 +19,26 @@
 
   function successHandler(data) {
     window.data = data;
-    mapPinList.appendChild(window.pin.renderPins(data));
+    mapPinList.appendChild(window.pin.renderPins(data, PINS_NUM));
   }
 
   filters.addEventListener('change', function () {
     window.debounce(function () {
-      clearPins();
       updatePinsOnFilter();
     });
   });
+
+  function updatePinsOnFilter() {
+    window.showCard.closeDialog();
+    clearPins();
+    successHandler(window.filterPins());
+  }
 
   function clearPins() {
     var pins = mapPinList.querySelectorAll('.map__pin:not(.map__pin__main)');
     [].forEach.call(pins, function (item) {
       item.remove();
     });
-  }
-
-  function updatePinsOnFilter() {
-    var filteredPins = window.filterPins(window.pin.renderPins(window.data)).slice(0, PINS_NUM);
-    mapPinList.appendChild(filteredPins);
   }
 
   function dragAndDrop(evt) {

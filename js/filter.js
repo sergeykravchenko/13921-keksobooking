@@ -38,8 +38,8 @@
     });
   }
 
-  function filterPins(data) {
-    return data.filter(function (item) {
+  function filterPins() {
+    return window.data.filter(function (item) {
       if (!filterType(housingType.value, item.offer.type)) {
         return false;
       }
