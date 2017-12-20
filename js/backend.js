@@ -2,30 +2,38 @@
 
 (function () {
   var SERVER_URL = 'https://1510.dump.academy/keksobooking';
+  var DEFAULT_CONNECTION_TIMEOUT = 1000;
   var NOTICE_ERROR = {
     connect: 'Произошла ошибка соединения',
     timeout: 'errorConnect'
   };
 
+  var STATUS_CODE = {
+    OK: 200,
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    NOT_FOUND: 404
+  };
+
   function createRequest(successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-    xhr.timeout = 10000;
+    xhr.timeout = DEFAULT_CONNECTION_TIMEOUT;
 
     xhr.addEventListener('load', function () {
       var error;
       switch (xhr.status) {
-        case 200:
+        case STATUS_CODE.OK:
           successHandler(xhr.response);
           break;
 
-        case 400:
+        case STATUS_CODE.BAD_REQUEST:
           error = 'Неверный запрос';
           break;
-        case 401:
+        case STATUS_CODE.UNAUTHORIZED:
           error = 'Пользователь не авторизован';
           break;
-        case 404:
+        case STATUS_CODE.NOT_FOUND:
           error = 'Ничего не найдено';
           break;
 

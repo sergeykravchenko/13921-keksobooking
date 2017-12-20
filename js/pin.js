@@ -4,7 +4,6 @@
   var LABEL_WIDTH = 40;
   var LABEL_HEIGHT = 40;
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
-  // var adverts = window.data.getRandomAdverts(window.data.ADVERT_NUM);
 
   function renderPin(advert) {
     var pin = mapPinTemplate.cloneNode(true);
@@ -22,9 +21,9 @@
       window.showCard.activePin = pin;
     },
 
-    renderPins: function (adverts) {
+    renderPins: function (adverts, num) {
       var fragment = document.createDocumentFragment();
-      adverts.forEach(function (notice) {
+      adverts.slice(0, num).forEach(function (notice) {
         var pin = renderPin(notice);
         var pinClickHandler = window.showCard.openDialog(notice);
         pin.addEventListener('click', pinClickHandler);
