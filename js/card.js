@@ -15,7 +15,7 @@
 
   function renderPhotos(photos) {
     var photoList = document.createDocumentFragment();
-    photos.forEach(function (photo) {
+    photos.slice(0, 6).forEach(function (photo) {
       var item = document.createElement('li');
       var img = document.createElement('img');
       img.width = 70;

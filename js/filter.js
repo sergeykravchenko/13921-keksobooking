@@ -17,7 +17,7 @@
       case 'any':
         return true;
       case 'middle':
-        return (item.value > 10000) && (item <= 50000);
+        return (item.value > 10000) && (item.value <= 50000);
       case 'low':
         return (item.value <= 10000);
       case 'high':
@@ -38,8 +38,8 @@
     });
   }
 
-  function filterPins() {
-    return window.data.filter(function (item) {
+  function filterPins(advertisements) {
+    return advertisements.filter(function (item) {
       if (!filterType(housingType.value, item.offer.type)) {
         return false;
       }
