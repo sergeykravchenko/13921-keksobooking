@@ -8,8 +8,8 @@
   var housingGuests = filters.querySelector('#housing-guests');
   var features = filters.querySelectorAll('[name="features"]');
 
-  function filterType(filterValue, itemValue) {
-    return filterValue === 'any' || filterValue === itemValue;
+  function filterSelect(filterValue, itemValue) {
+    return filterValue === 'any' || filterValue === itemValue.toString();
   }
 
   function filterPrice(item) {
@@ -26,33 +26,33 @@
     return item === housingPrice.value;
   }
 
-  function filterNum(filterValue, itemValue) {
-    return filterValue === 'any' || filterValue === parseInt(itemValue, 10);
-  }
-
-  function filterCheckbox(nodelist) {
-    [].filter.call(nodelist, function (item) {
-      return item.checked;
-    }).map(function (item) {
-      return item.value;
+  function filterFeatures(filterArray, itemArray) {
+    return filterArray.every(function (item) {
+      return itemArray.indexOf(item);
     });
   }
 
   function filterPins(advertisements) {
+    var featuresArray = [].filter.call(features, function (item) {
+      return item.checked;
+    }).map(function (item) {
+      return item.value;
+    });
+
     return advertisements.filter(function (item) {
-      if (!filterType(housingType.value, item.offer.type)) {
+      if (!filterSelect(housingType.value, item.offer.type)) {
         return false;
       }
       if (!filterPrice(item.offer.price)) {
         return false;
       }
-      if (!filterNum(housingRooms.value, item.offer.rooms)) {
+      if (!filterSelect(housingRooms.value, item.offer.rooms)) {
         return false;
       }
-      if (!filterNum(housingGuests.value, item.offer.guests)) {
+      if (!filterSelect(housingGuests.value, item.offer.guests)) {
         return false;
       }
-      if (!filterCheckbox(features)) {
+      if (!filterFeatures(featuresArray, item.offer.features)) {
         return false;
       }
       return true;
