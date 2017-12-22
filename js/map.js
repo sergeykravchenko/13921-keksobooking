@@ -14,11 +14,12 @@
   var noticeFormBlocks = noticeForm.querySelectorAll('.form__element');
   var coordX;
   var coordY;
+  var advertisements = [];
 
   mapPinMain.addEventListener('mousedown', dragAndDrop);
 
   function successHandler(data) {
-    window.data = data;
+    advertisements = data;
     mapPinList.appendChild(window.pin.renderPins(data, PINS_NUM));
   }
 
@@ -31,11 +32,13 @@
   function updatePinsOnFilter() {
     window.showCard.closeDialog();
     clearPins();
-    successHandler(window.filterPins());
+    var dataCopy = advertisements.slice();
+    var filteredPins = window.filterPins(dataCopy);
+    mapPinList.appendChild(window.pin.renderPins(filteredPins, PINS_NUM));
   }
 
   function clearPins() {
-    var pins = mapPinList.querySelectorAll('.map__pin:not(.map__pin__main)');
+    var pins = mapPinList.querySelectorAll('.map__pin:not(.map__pin--main)');
     [].forEach.call(pins, function (item) {
       item.remove();
     });
@@ -43,6 +46,7 @@
 
   function dragAndDrop(evt) {
     evt.preventDefault();
+    mapPinMain.style.zIndex = 99;
 
     var startCoords = {
       x: evt.clientX,
@@ -68,7 +72,9 @@
       mapPinMain.style.left = coordX + 'px';
       mapPinMain.style.top = coordY + 'px';
 
-      window.form.addressField.value = 'x: ' + coordX + ', y: ' + coordY;
+      window.debounce(function () {
+        window.form.addressField.value = 'x: ' + coordX + ', y: ' + coordY;
+      });
     }
 
     function onMouseUp(upEvt) {
