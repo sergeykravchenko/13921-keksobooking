@@ -7,33 +7,27 @@
   var activeDialog;
   var activePin;
 
-  mapPinList.addEventListener('click', function (evt) {
-    var target = evt.target;
-
+  function delegatePin(target) {
     while (target !== mapPinList) {
       if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-        window.pin.activatePin(target);
+        window.pin.activate(target);
         window.showCard.openDialog();
 
         break;
       }
-
       target = target.parentNode;
     }
+  }
+
+  mapPinList.addEventListener('click', function (evt) {
+    var target = evt.target;
+    delegatePin(target);
   });
 
   mapPinList.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.util.KEY_CODE.ENTER) {
       var target = evt.target;
-
-      while (target !== mapPinList) {
-        if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-          window.pin.activatePin(target);
-          window.showCard.openDialog();
-
-          return;
-        }
-      }
+      delegatePin(target);
     }
   });
 
@@ -53,7 +47,7 @@
 
     openDialog: function (advert) {
       return function () {
-        var dialog = window.card.renderCard(advert);
+        var dialog = window.card.render(advert);
         if (activeDialog) {
           map.replaceChild(dialog, activeDialog);
         } else {

@@ -4,8 +4,8 @@
   var SERVER_URL = 'https://1510.dump.academy/keksobooking';
   var DEFAULT_CONNECTION_TIMEOUT = 1000;
   var NOTICE_ERROR = {
-    connect: 'Произошла ошибка соединения',
-    timeout: 'errorConnect'
+    CONNECT: 'Произошла ошибка соединения',
+    TIMEOUT: 'errorConnect'
   };
 
   var STATUS_CODE = {
@@ -15,7 +15,7 @@
     NOT_FOUND: 404
   };
 
-  function createRequest(successHandler, errorHandler) {
+  function createRequest(onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.timeout = DEFAULT_CONNECTION_TIMEOUT;
@@ -24,7 +24,7 @@
       var error;
       switch (xhr.status) {
         case STATUS_CODE.OK:
-          successHandler(xhr.response);
+          onSuccess(xhr.response);
           break;
 
         case STATUS_CODE.BAD_REQUEST:
@@ -42,29 +42,29 @@
       }
 
       if (error) {
-        errorHandler(error);
+        onError(error);
       }
     });
 
     xhr.addEventListener('error', function () {
-      errorHandler(NOTICE_ERROR.connect);
+      onError(NOTICE_ERROR.CONNECT);
     });
 
     xhr.addEventListener('timeout', function () {
-      errorHandler(NOTICE_ERROR.timeout + xhr.timeout + 'мс');
+      onError(NOTICE_ERROR.TIMEOUT + xhr.timeout + 'мс');
     });
 
     return xhr;
   }
 
   window.backend = {
-    load: function (successHandler, errorHandler) {
-      var xhr = createRequest(successHandler, errorHandler);
+    load: function (onSuccess, onError) {
+      var xhr = createRequest(onSuccess, onError);
       xhr.open('GET', SERVER_URL + '/data');
       xhr.send();
     },
-    save: function (data, successHandler, errorHandler) {
-      var xhr = createRequest(successHandler, errorHandler);
+    save: function (data, onSuccess, onError) {
+      var xhr = createRequest(onSuccess, onError);
       xhr.open('POST', SERVER_URL);
       xhr.send(data);
     },

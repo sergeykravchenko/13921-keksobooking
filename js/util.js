@@ -22,7 +22,7 @@
       el.classList.remove(className);
     },
 
-    bounded: function (point, min, max) {
+    limitArea: function (point, min, max) {
       return Math.max(min, Math.min(point, max));
     }
   };

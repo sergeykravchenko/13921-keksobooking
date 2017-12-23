@@ -14,19 +14,19 @@
   }
 
   window.pin = {
-    activatePin: function (pin) {
+    activate: function (pin) {
       window.showCard.deactivatePin();
 
       pin.classList.add('map__pin--active');
       window.showCard.activePin = pin;
     },
 
-    renderPins: function (adverts, num) {
+    render: function (adverts, num) {
       var fragment = document.createDocumentFragment();
       adverts.slice(0, num).forEach(function (notice) {
         var pin = renderPin(notice);
-        var pinClickHandler = window.showCard.openDialog(notice);
-        pin.addEventListener('click', pinClickHandler);
+        var onPinClick = window.showCard.openDialog(notice);
+        pin.addEventListener('click', onPinClick);
         fragment.appendChild(pin);
       });
       return fragment;

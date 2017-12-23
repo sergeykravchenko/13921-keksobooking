@@ -12,23 +12,20 @@
     return filterValue === 'any' || filterValue === itemValue.toString();
   }
 
-  function filterPrice(item) {
-    switch (housingPrice.value) {
-      case 'any':
-        return true;
-      case 'middle':
-        return (item > 10000) && (item <= 50000);
-      case 'low':
-        return (item <= 10000);
-      case 'high':
-        return (item > 50000);
-    }
-    return item === housingPrice.value;
+  function filterPrice(itemValue) {
+    var price = {
+      'any': true,
+      'middle': itemValue > 10000 && itemValue <= 50000,
+      'low': itemValue <= 10000,
+      'high': itemValue > 50000
+    };
+
+    return price[itemValue] === housingPrice.value;
   }
 
   function filterFeatures(filterArray, itemArray) {
     return filterArray.every(function (item) {
-      return itemArray.indexOf(item);
+      return itemArray.includes(item);
     });
   }
 

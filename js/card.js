@@ -2,6 +2,12 @@
 
 (function () {
   var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
+  var OFFER_TYPE = {
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало',
+    palace: 'Дворец'
+  };
 
   function renderFeatures(features) {
     var list = document.createDocumentFragment();
@@ -28,29 +34,20 @@
   }
 
   window.card = {
-    renderCard: function (advert) {
+    render: function (advert) {
       var dialog = mapCardTemplate.cloneNode(true);
       var featuresList = dialog.querySelector('.popup__features');
       var photosList = dialog.querySelector('.popup__pictures');
       var featuresItems = renderFeatures(advert.offer.features);
       var photosItems = renderPhotos(advert.offer.photos);
-      var offerType;
 
       window.util.clearParent(featuresList);
       window.util.clearParent(photosList);
 
-      if (advert.offer.type === 'flat') {
-        offerType = 'Квартира';
-      } else if (advert.offer.type === 'bungalo') {
-        offerType = 'Бунгало';
-      } else if (advert.offer.type === 'house') {
-        offerType = 'Дом';
-      }
-
       dialog.querySelector('h3').textContent = advert.offer.title;
       dialog.querySelector('p small').textContent = advert.offer.address;
       dialog.querySelector('.popup__price').textContent = advert.offer.price + ' ₽/ночь';
-      dialog.querySelector('h4').textContent = offerType;
+      dialog.querySelector('h4').textContent = OFFER_TYPE[advert.offer.type];
       dialog.querySelector('h4 + p').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
       dialog.querySelector('h4 + p + p').textContent = 'Заезд после' + advert.offer.checkin + ' выезд до ' + advert.offer.checkout;
       featuresList.appendChild(featuresItems);
