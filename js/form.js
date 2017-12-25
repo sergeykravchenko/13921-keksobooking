@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var MAIN_DEFAULT_AVATAR = 'img/main-pin-image.png';
+  var USER_DEFAULT_AVATAR = 'img/muffin.png';
   var OFFER_TYPE = [
     'Квартира',
     'Дом',
@@ -27,8 +29,11 @@
     [3]
   ];
   var noticeForm = document.querySelector('.notice__form');
+  var mainPinImage = document.querySelector('.map__pin--main img');
+  var userAvatar = noticeForm.querySelector('.notice__preview img');
   var noticeFormBlocks = noticeForm.querySelectorAll('.form__element');
   var formSubmit = noticeForm.querySelector('.form__submit');
+  var formReset = noticeForm.querySelector('.form__reset');
   var titleField = noticeForm.querySelector('#title');
   var typeField = noticeForm.querySelector('#type');
   var priceField = noticeForm.querySelector('#price');
@@ -125,12 +130,23 @@
     checkValidity(priceField);
   }
 
-  function resetForm() {
+  function onResetForm() {
     noticeForm.reset();
+    resetUploadPhotos();
+    onRoomsCapacityChange();
+    onTypePriceSync();
+    window.map.addressField.value = window.map.getAddressCoords(window.map.startX, window.map.startY);
+    mainPinImage.src = MAIN_DEFAULT_AVATAR;
+    userAvatar.src = USER_DEFAULT_AVATAR;
+  }
+
+  function resetUploadPhotos() {
+    var images = document.querySelectorAll('.form__photo-container img');
+    window.util.clearElements(images);
   }
 
   function onFormSubmit(evt) {
-    window.backend.save(new FormData(noticeForm), resetForm, window.backend.showError);
+    window.backend.save(new FormData(noticeForm), onResetForm, window.backend.showError);
     evt.preventDefault();
   }
 
@@ -143,10 +159,6 @@
   priceField.addEventListener('change', onPriceChange);
   roomField.addEventListener('change', onRoomsCapacityChange);
   formSubmit.addEventListener('click', onCheckClick);
+  formReset.addEventListener('click', onResetForm);
   noticeForm.addEventListener('submit', onFormSubmit);
-
-
-  window.form = {
-    addressField: noticeForm.querySelector('#address')
-  };
 })();

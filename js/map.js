@@ -13,12 +13,22 @@
   var mapPinList = map.querySelector('.map__pins');
   var filters = document.querySelector('.map__filters');
   var noticeForm = document.querySelector('.notice__form');
+  var addressField = noticeForm.querySelector('#address');
   var noticeFormBlocks = noticeForm.querySelectorAll('.form__element');
   var coordX;
   var coordY;
   var advertisements = [];
+  var startX = parseInt(getComputedStyle(mapPinMain).getPropertyValue('left'), 10);
+  var startY = parseInt(getComputedStyle(mapPinMain).getPropertyValue('top'), 10) + (PIN_HEIGHT / 2 + PIN_TAIL);
 
   mapPinMain.addEventListener('mousedown', dragAndDrop);
+  addressField.value = getAddressCoords(startX, startY);
+
+  function getAddressCoords(posX, posY) {
+    var addressCoordX = Math.round(posX);
+    var addressCoordY = Math.round(posY + (PIN_HEIGHT / 2 + PIN_TAIL));
+    return 'x: ' + addressCoordX + ', y: ' + addressCoordY;
+  }
 
   function onSuccess(data) {
     advertisements = data;
@@ -41,9 +51,7 @@
 
   function clearPins() {
     var pins = mapPinList.querySelectorAll('.map__pin:not(.map__pin--main)');
-    [].forEach.call(pins, function (item) {
-      item.remove();
-    });
+    window.util.clearElements(pins);
   }
 
   function dragAndDrop(evt) {
@@ -75,18 +83,12 @@
       mapPinMain.style.top = coordY + 'px';
     }
 
-    function getAddressCoords() {
-      var addressCoordX = Math.round(coordX + (PIN_HEIGHT / 2 + PIN_TAIL));
-      var addressCoordY = Math.round(coordY + (PIN_HEIGHT / 2 + PIN_TAIL));
-      return 'x: ' + addressCoordX + ', y:' + addressCoordY;
-    }
-
     function onMouseUp(upEvt) {
       upEvt.preventDefault();
       window.util.removeClass(map, 'map--faded');
       window.util.removeClass(noticeForm, 'notice__form--disabled');
       window.debounce(function () {
-        window.form.addressField.value = getAddressCoords();
+        addressField.value = getAddressCoords(coordX, coordY);
       });
 
       [].forEach.call(noticeFormBlocks, function (field) {
@@ -102,4 +104,11 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   }
+
+  window.map = {
+    startX: startX,
+    startY: startY,
+    addressField: addressField,
+    getAddressCoords: getAddressCoords
+  };
 })();

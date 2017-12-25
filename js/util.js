@@ -18,6 +18,12 @@
       }
     },
 
+    clearElements: function (el) {
+      [].forEach.call(el, function (item) {
+        item.remove();
+      });
+    },
+
     removeClass: function (el, className) {
       el.classList.remove(className);
     },

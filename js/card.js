@@ -49,7 +49,7 @@
       dialog.querySelector('.popup__price').textContent = advert.offer.price + ' ₽/ночь';
       dialog.querySelector('h4').textContent = OFFER_TYPE[advert.offer.type];
       dialog.querySelector('h4 + p').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
-      dialog.querySelector('h4 + p + p').textContent = 'Заезд после' + advert.offer.checkin + ' выезд до ' + advert.offer.checkout;
+      dialog.querySelector('h4 + p + p').textContent = 'Заезд после ' + advert.offer.checkin + ' выезд до ' + advert.offer.checkout;
       featuresList.appendChild(featuresItems);
       photosList.appendChild(photosItems);
       dialog.querySelector('.popup__features + p').textContent = advert.offer.description;
