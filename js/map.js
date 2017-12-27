@@ -15,18 +15,16 @@
   var noticeForm = document.querySelector('.notice__form');
   var addressField = noticeForm.querySelector('#address');
   var noticeFormBlocks = noticeForm.querySelectorAll('.form__element');
-  var coordX;
-  var coordY;
+  var coordX = parseInt(getComputedStyle(mapPinMain).getPropertyValue('left'), 10);
+  var coordY = parseInt(getComputedStyle(mapPinMain).getPropertyValue('top'), 10);
   var advertisements = [];
-  var startX = parseInt(getComputedStyle(mapPinMain).getPropertyValue('left'), 10);
-  var startY = parseInt(getComputedStyle(mapPinMain).getPropertyValue('top'), 10) + (PIN_HEIGHT / 2 + PIN_TAIL);
+  var debouncedFilter = window.util.debounce(updatePinsOnFilter);
 
   mapPinMain.addEventListener('mousedown', dragAndDrop);
-  addressField.value = getAddressCoords(startX, startY);
 
-  function getAddressCoords(posX, posY) {
-    var addressCoordX = Math.round(posX);
-    var addressCoordY = Math.round(posY + (PIN_HEIGHT / 2 + PIN_TAIL));
+  function getAddressCoords() {
+    var addressCoordX = Math.round(coordX);
+    var addressCoordY = Math.round(coordY + (PIN_HEIGHT / 2 + PIN_TAIL));
     return 'x: ' + addressCoordX + ', y: ' + addressCoordY;
   }
 
@@ -36,9 +34,7 @@
   }
 
   filters.addEventListener('change', function () {
-    window.debounce(function () {
-      updatePinsOnFilter();
-    });
+    debouncedFilter();
   });
 
   function updatePinsOnFilter() {
@@ -87,9 +83,7 @@
       upEvt.preventDefault();
       window.util.removeClass(map, 'map--faded');
       window.util.removeClass(noticeForm, 'notice__form--disabled');
-      window.debounce(function () {
-        addressField.value = getAddressCoords(coordX, coordY);
-      });
+      addressField.value = getAddressCoords(coordX, coordY);
 
       [].forEach.call(noticeFormBlocks, function (field) {
         field.removeAttribute('disabled');
@@ -106,8 +100,6 @@
   }
 
   window.map = {
-    startX: startX,
-    startY: startY,
     addressField: addressField,
     getAddressCoords: getAddressCoords
   };

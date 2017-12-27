@@ -12,18 +12,16 @@
     return filterValue === 'any' || filterValue === itemValue.toString();
   }
 
-  function filterPrice(item) {
-    switch (housingPrice.value) {
-      case 'any':
-        return true;
-      case 'middle':
-        return (item > 10000) && (item <= 50000);
-      case 'low':
-        return (item <= 10000);
-      case 'high':
-        return (item > 50000);
-    }
-    return item === housingPrice.value;
+  function filterPrice(filterValue, itemValue) {
+    var price = {
+      'any': true,
+      'middle': itemValue > 10000 && itemValue <= 50000,
+      'low': itemValue <= 10000,
+      'high': itemValue > 50000
+    };
+
+    return price[filterValue] || false;
+
   }
 
   function filterFeatures(filterArray, itemArray) {
@@ -40,22 +38,11 @@
     });
 
     return advertisements.filter(function (item) {
-      if (!filterSelect(housingType.value, item.offer.type)) {
-        return false;
-      }
-      if (!filterPrice(item.offer.price)) {
-        return false;
-      }
-      if (!filterSelect(housingRooms.value, item.offer.rooms)) {
-        return false;
-      }
-      if (!filterSelect(housingGuests.value, item.offer.guests)) {
-        return false;
-      }
-      if (!filterFeatures(featuresArray, item.offer.features)) {
-        return false;
-      }
-      return true;
+      return filterSelect(housingType.value, item.offer.type)
+        && filterPrice(housingPrice.value, item.offer.price)
+        && filterSelect(housingRooms.value, item.offer.rooms)
+        && filterSelect(housingGuests.value, item.offer.guests)
+        && filterFeatures(featuresArray, item.offer.features);
     });
   }
 

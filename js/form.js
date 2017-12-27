@@ -135,7 +135,7 @@
     resetUploadPhotos();
     onRoomsCapacityChange();
     onTypePriceSync();
-    window.map.addressField.value = window.map.getAddressCoords(window.map.startX, window.map.startY);
+    window.map.addressField.value = window.map.getAddressCoords();
     mainPinImage.src = MAIN_DEFAULT_AVATAR;
     userAvatar.src = USER_DEFAULT_AVATAR;
   }
